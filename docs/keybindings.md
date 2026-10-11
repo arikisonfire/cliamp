@@ -96,8 +96,8 @@ If the active provider has no `Ctrl+F` search, `Ctrl+F` searches YouTube. The
 overlay shows `[Search: YouTube]` and names the provider that has no search.
 
 In that search input, `Tab` switches between YouTube, SoundCloud and all
-sources. `[Search: All sources]` searches YouTube, SoundCloud and every other
-configured provider with a `Ctrl+F` search at the same time. Podcasts and Local
+sources. `[Search: All sources]` searches YouTube, SoundCloud, Bandcamp and
+every other configured provider with a `Ctrl+F` search at the same time. Podcasts and Local
 are left out, and the YouTube and SoundCloud providers count as the YouTube and
 SoundCloud sources. The results show one section per source, in that order, as
 soon as the first source answers. The last line names the sources that still

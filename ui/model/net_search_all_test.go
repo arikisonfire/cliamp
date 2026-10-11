@@ -37,11 +37,25 @@ func namedTracks(prefix string, n int) []playlist.Track {
 	return tracks
 }
 
+// useTestBuiltins replaces the built-in sources of an all-sources search for
+// one test.
+func useTestBuiltins(t *testing.T, sources ...netSearchAllSource) {
+	t.Helper()
+	orig := netSearchAllBuiltins
+	netSearchAllBuiltins = sources
+	t.Cleanup(func() { netSearchAllBuiltins = orig })
+}
+
+func idleSource(name string) netSearchAllSource {
+	return netSearchAllSource{name: name, search: func(context.Context, string) ([]playlist.Track, error) { return nil, nil }}
+}
+
 // allSearchTestModel returns a model whose net search runs an all-sources
 // search for "blue" over YouTube, SoundCloud and one Navidrome server. The
 // commands of the sources are not run: tests answer with sourceAnswer.
 func allSearchTestModel(t *testing.T) Model {
 	t.Helper()
+	useTestBuiltins(t, idleSource("YouTube"), idleSource("SoundCloud"))
 	m := keybindingTestModel()
 	m.plVisible = 12
 	m.providers = append(m.providers, provider.Entry{Key: "navidrome", Name: "Navidrome", Provider: searchTestProvider("Navidrome")})
@@ -122,19 +136,17 @@ func TestNetSearchAllSourcesOrderAndSkips(t *testing.T) {
 	for _, src := range m.netSearchAllSources() {
 		names = append(names, src.name)
 	}
-	if got, want := strings.Join(names, ", "), "YouTube, SoundCloud, Navidrome, Mixcloud"; got != want {
+	if got, want := strings.Join(names, ", "), "YouTube, SoundCloud, Bandcamp, Navidrome, Mixcloud"; got != want {
 		t.Fatalf("sources = %s, want %s", got, want)
 	}
 }
 
 func TestNetSearchAllRunsEverySource(t *testing.T) {
 	var queries []string
-	builtins := netSearchAllBuiltins
-	t.Cleanup(func() { netSearchAllBuiltins = builtins })
-	netSearchAllBuiltins = []netSearchAllSource{{name: "YouTube", search: func(_ context.Context, q string) ([]playlist.Track, error) {
+	useTestBuiltins(t, netSearchAllSource{name: "YouTube", search: func(_ context.Context, q string) ([]playlist.Track, error) {
 		queries = append(queries, q)
 		return namedTracks("yt", 2), nil
-	}}}
+	}})
 
 	m := keybindingTestModel()
 	m.plVisible = 12

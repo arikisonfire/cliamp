@@ -9,6 +9,7 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
+	"github.com/bjarneo/cliamp/internal/bandcamp"
 	"github.com/bjarneo/cliamp/playlist"
 	"github.com/bjarneo/cliamp/provider"
 	"github.com/bjarneo/cliamp/resolve"
@@ -42,6 +43,9 @@ type netSearchAllSource struct {
 var netSearchAllBuiltins = []netSearchAllSource{
 	{name: "YouTube", search: ytdlSearch("ytsearch")},
 	{name: "SoundCloud", search: ytdlSearch("scsearch")},
+	{name: "Bandcamp", search: func(ctx context.Context, query string) ([]playlist.Track, error) {
+		return bandcamp.SearchTracks(ctx, query, netSearchAllLimit)
+	}},
 }
 
 // ytdlSearch returns a search through a yt-dlp search prefix such as
