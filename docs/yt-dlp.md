@@ -27,6 +27,8 @@ cliamp search-sc "lofi beats"                  # search SoundCloud
 
 In the TUI, press `Ctrl+F` to search the active provider. This searches YouTube for YouTube/YT-Music, SoundCloud for SoundCloud, Mixcloud for Mixcloud, and NetEase for NetEase. These providers have signed-in playback guides: [SoundCloud](soundcloud.md), [Mixcloud](mixcloud.md), and [NetEase](netease.md).
 
+When the active provider has no search, such as Radio, `Ctrl+F` searches YouTube. Press `Tab` in the search input to search SoundCloud, or all sources at once: YouTube, SoundCloud and every other configured provider with a search. The results show one section per source. See [Search and filter modes](keybindings.md#search-and-filter-modes).
+
 ## Disclaimer
 
 **Use at your own risk.** Downloading or streaming copyrighted content can violate the terms of service of these platforms. You are responsible for use of this feature.
